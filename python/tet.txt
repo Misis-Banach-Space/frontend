@@ -1,0 +1,12 @@
+title: Обучение 1С с нуля для начинающих: курсы, самоучители, уроки
+description: Курсы обучения 1С 8.3 - семинары, видеоуроки, курсы и самоучители. Бесплатные и платные материалы от ПрофБух8.ру. Отзывы.
+vozrast: 12 лет 257 дней
+page_size: 200.1 КБ
+page_load_time: 735 сек
+ip: 82.202.237.202
+yandex_iks: 530
+competitiors: ['учетбеззабот.рф', '1c-uroki.ru', 'scloud.ru', 'uc1.1c.ru', 'online.1c.ru', 'online-ufa.ru', '42clouds.com', 'center-comptech.ru', 'erp-project.com.ua', 'e-office24.ru']
+yandex_request: [['профбух', 'https://profbuh8.ru/', '45'], ['регистрация обособленного подразделения 2016 пошаговая инструкция', 'https://profbuh8.ru/2016/09/registratsiya-obosoblennogo-podrazdeleniya/', '69'], ['итератор для значения не определен', 'https://profbuh8.ru/2021/04/iterator-dlya-znacheniya-ne-opredelen-v-1s-8-3/', '38'], ['внутренняя ошибка компоненты dbeng8', 'https://profbuh8.ru/2016/05/vnutrennyaya-oshibka-komponentyi-dbeng8/', '122'], ['климова марина аркадьевна', 'https://profbuh8.ru/klimova/', '11'], ['не задана цена атт', 'https://profbuh8.ru/2016/07/oshibka-v-1s-8-3-ut-ne-zadana-tsena-att/', '16'], ['оборудование передано в монтаж проводка', 'https://profbuh8.ru/2021/04/postuplenie-oborudovaniya-v-1s-8-3-poshagovaya-instruktsiya/', '21'], ['ольга шерст', 'https://profbuh8.ru/pb8/', '9'], ['поле объекта недоступно для записи', 'https://profbuh8.ru/2021/01/pole-obekta-nedostupno-dlya-zapisi-v-1s-8-3/', '17'], ['доверенность 1с', 'https://profbuh8.ru/2018/10/vyipiska-doverennosti-v-1s-8-3-buhgalteriya-3-0/', '18']]
+requests: {'Август': [116, 647], 'Сентябрь': [129, 684], 'Октябрь': [118, 599], 'Ноябрь': [137, 575], 'Декабрь': [126, 636], 'Январь': [107, 429], 'Февраль': [133, 597], 'Март': [117, 585], 'Апрель': [1, 96], 'Май': [1, 96], 'Июнь': [1, 49], 'Июль': [64, 204], 'Title': ['Количество запросов', 'Количество эффективных показов']}
+visits_by_month: {'Июнь': [36633], 'Июль': [48349], 'Авг': [44431], 'Title': ['Количество заходов']}
+visits_by_country: {'Russia': [91.53], 'Kazakhstan': [5.11], 'Belarus': [1.58], 'Ukraine': [1.12], 'Netherlands': [0.54], 'Title': ['Посещаемость, %']}
