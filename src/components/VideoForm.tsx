@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 const VideoForm = () => {
     const navigate = useNavigate();
     const [linkArr, setLinkArr] = useState<string[]>([]);
-    // const [startTime, setStartTime] = useState("");
-    // const [endTime, setEndTime] = useState("");
+    const [siteRequest, setSiteRequest] = useState<string[]>([]);
+    const [pageRequest, setPageRequest] = useState<string[]>([]);
+
     // const [lengthAnnotation, setLengthAnnotation] = useState("");
     // const [lengthArticle, setLengthArticle] = useState("");
     // const [timingScreenshot, setTimingScreenshot] = useState("");
@@ -36,6 +37,7 @@ const VideoForm = () => {
                 setError3(false);
                 setHelperText3('');
                 linkArr.push(line);
+
             } else {
                 setError3(true);
                 setHelperText3('Неверный формат ввода ссылки. Вводите каждую ссылку с новой строки');
@@ -60,55 +62,54 @@ const VideoForm = () => {
 
 
         if (!error3 && !errorEmpty) {
+            let sites = [];
+            let pages = [];
             for(let i = 0; i < linkArr.length; i++){
                 if (isDomainOnlyUrl(linkArr[i])) {
+                    if (linkArr[i].endsWith("/")) {
+                        linkArr[i] = linkArr[i].slice(0, -1);
+                    }
                     try {
                         let response = await ApiService.createSite({
                             url: linkArr[i],
                         });
-                        // check if response is ok
+                        console.log(response)
                         if (response.status === 201) {
                             console.log("siteeeeeee", response.data);
-                        } else if (response.status === 400) {
-                            // handle other status codes
-                            
-                            setError3(true);
-                            errorEmpty = true;
-                            setHelperText3("Введите ссылки на сайты. Каждая ссылка в новой строке");
-                            throw new Error(response.statusText);
-                        }
+                        } 
+                        sites.push(response.data);
                     } catch (error) {
-                        // handle errors
-                        console.log(error);
+                        setError3(true);
+                        errorEmpty = true;
+                        setHelperText3(`Повторная отправка ссылки ${linkArr[i]}`);
+                        console.log(error)
+                    }
+                }
+                else {
+                    if (linkArr[i].endsWith("/")) {
+                        linkArr[i] = linkArr[i].slice(0, -1);
+                    }
+                    try {
+                        let response = await ApiService.createSubPage({
+                            url: linkArr[i],
+                        });
+                        console.log(response)
+                        if (response.status === 201) {
+                            console.log("paaaaaaage", response.data);
+                        } 
+                        pages.push(response.data);
+                    } catch (error) {
+                        setError3(true);
+                        errorEmpty = true;
+                        setHelperText3(`Повторная отправка ссылки ${linkArr[i]}`);
+                        console.log(error)
                     }
                 }
             }
-
-            navigate(`myVideos`);
-            
-
-            //   //setIsLoading(true);
-            //   //send data to server
-            //   try {
-            //     let response = await ApiService.createSite({
-            //       url: link,
-            //     });
-            //     // check if response is ok
-            //     if (response.status === 200) {
-            //       setIsLoading(false);
-            //       console.log("video", response.data.id);
-            //       navigate(`myVideos`);
-            //       console.log("hereeeee");
-            //     } else {
-            //       // handle other status codes
-            //       throw new Error(response.statusText);
-            //     }
-            //   } catch (error) {
-            //     // handle errors
-            //     //setIsLoading(false);
-            //     console.log(error);
-            //     //alert("Вы не авторизованы");
-            //   }
+            // if(sites.length + pages.length === linkArr.length && linkArr.length !== 0) navigate(`myVideos`);
+            if(sites.length + pages.length === linkArr.length) navigate(`myVideos`);
+            setSiteRequest(sites);
+            setPageRequest(pages);
         }
     }
 
@@ -150,7 +151,7 @@ const VideoForm = () => {
                     />
                 </Box>
             </Paper>
-            <Button onClick={handleSubmit} className="gradientButton" style={{ borderRadius: '20px', color: 'white' }} sx={{ mt: 2, ml: 'auto', mr: 'auto' }}>Сгенерировать</Button>
+            <Button disabled={error3} onClick={handleSubmit} className="gradientButton" style={{ borderRadius: '20px', color: 'white' }} sx={{ mt: 2, ml: 'auto', mr: 'auto' }}>Сгенерировать</Button>
         </Box>
     )
 }

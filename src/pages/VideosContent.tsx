@@ -6,7 +6,7 @@ import { Pagination } from "@mui/material";
 
 
 const article = {
-    title: 'Сгенерированная Статья',
+    title: 'Запрос',
     video_link: 'https://www.youtube.com/watch?v=Ta6pNPK3wig&t=2s',
     date: '24.06.2023',
     html_data: ''

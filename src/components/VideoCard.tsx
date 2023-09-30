@@ -2,12 +2,9 @@ import { Link } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useState, useEffect } from "react"
-
-const imgLink = "/src/assets/background_card.jpg";
 
 interface Props {
     link: string;
@@ -32,11 +29,6 @@ export default function VideoCard(props: Props) {
 
     return (
         <Card sx={{ maxWidth: 700, boxShadow: '0px 0px 10px 5px rgba(0,0,0,0.3)', borderRadius: '15px', mt: 2, mb: 10, ml: 'auto', mr: 'auto' }} >
-            <CardMedia
-                sx={{ height: 400 }}
-                image={imgLink}
-                title="green iguana"
-            />
             <CardContent style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
                 <Typography
                     variant="h1"

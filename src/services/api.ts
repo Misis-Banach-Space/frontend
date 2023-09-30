@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from 'axios';
 
 interface SettingFromData {
     annotation_length: number;
@@ -52,16 +52,21 @@ const BASE_URL = "http://larek.itatmisis.ru:12347";
 
 const ApiService = {
     async createSite(data: CreateSite) {
-        const response = await axios
-            .post(`${BASE_URL}/api/v1/websites/create`, data)
-        let result = await response;
-        return result;
+        try {
+            const response = await axios.post(`${BASE_URL}/api/v1/websites/create`, data);
+            return response;
+        } catch (error) {
+            return Promise.reject(error);
+        }
     },
     async createSubPage(data: CreateSubPage) {
-        const response = await axios
+        try {
+            const response = await axios
             .post(`${BASE_URL}/api/v1/pages/create`, data)
-        let result = await response;
-        return result;
+            return response;
+        } catch (error) {
+            return Promise.reject(error);
+        }
     },
     async getWebsiteById(data: number) {
         const response = await axios.get(`${BASE_URL}/api/v1/websites/${data}`);
