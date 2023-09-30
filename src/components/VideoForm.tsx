@@ -1,12 +1,12 @@
-import { Paper, TextField, Typography, Box, Button, InputAdornment} from "@mui/material";
+import { Paper, TextField, Typography, Box, Button, InputAdornment } from "@mui/material";
 import { useState } from 'react'
-// import ApiService from "../services/api";
+import ApiService from "../services/api";
 import DownloadIcon from '@mui/icons-material/Download';
 import { useNavigate } from "react-router-dom";
 
 const VideoForm = () => {
     const navigate = useNavigate();
-    const [link, setLink] = useState<string[]>([]);
+    const [linkArr, setLinkArr] = useState<string[]>([]);
     // const [startTime, setStartTime] = useState("");
     // const [endTime, setEndTime] = useState("");
     // const [lengthAnnotation, setLengthAnnotation] = useState("");
@@ -16,14 +16,10 @@ const VideoForm = () => {
     const [error3, setError3] = useState(false);
     const [helperText3, setHelperText3] = useState('');
 
-    // function checkForDomain(link: string) {
-    //     const slashCount = (link.match(/\//g) || []).length;
-    //       console.log(slashCount)
-    //     if (slashCount > 3) {
-    //       return false;
-    //     }
-    //     return true;
-    //   }
+    function isDomainOnlyUrl(url: string): boolean {
+        const pattern = /^(http|https):\/\/[^\/]*\/?$/;
+        return pattern.test(url);
+    }
 
     const handleMultipleLinksChange = (event: any) => {
         const inputText = event.target.value;
@@ -35,7 +31,7 @@ const VideoForm = () => {
             if (
                 urlRegex.test(
                     line
-                )  && line.match(/http/g).length === 1
+                ) && line.match(/http/g).length === 1
             ) {
                 setError3(false);
                 setHelperText3('');
@@ -45,17 +41,17 @@ const VideoForm = () => {
                 setHelperText3('Неверный формат ввода ссылки. Вводите каждую ссылку с новой строки');
             }
         }
-        setLink(linkArr);
+        setLinkArr(linkArr);
     }
 
     // handle submit
     async function handleSubmit() {
         let errorEmpty = false;
         // check if link valid
-        if (!link) {
+        if (!linkArr) {
             setError3(true);
             errorEmpty = true;
-            setHelperText3("Введите ссылку на сайт");
+            setHelperText3("Введите ссылки на сайты. Каждая ссылка в новой строке");
         } else {
             setError3(false);
             errorEmpty = false;
@@ -64,7 +60,32 @@ const VideoForm = () => {
 
 
         if (!error3 && !errorEmpty) {
+            for(let i = 0; i < linkArr.length; i++){
+                if (isDomainOnlyUrl(linkArr[i])) {
+                    try {
+                        let response = await ApiService.createSite({
+                            url: linkArr[i],
+                        });
+                        // check if response is ok
+                        if (response.status === 201) {
+                            console.log("siteeeeeee", response.data);
+                        } else if (response.status === 400) {
+                            // handle other status codes
+                            
+                            setError3(true);
+                            errorEmpty = true;
+                            setHelperText3("Введите ссылки на сайты. Каждая ссылка в новой строке");
+                            throw new Error(response.statusText);
+                        }
+                    } catch (error) {
+                        // handle errors
+                        console.log(error);
+                    }
+                }
+            }
+
             navigate(`myVideos`);
+            
 
             //   //setIsLoading(true);
             //   //send data to server

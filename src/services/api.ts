@@ -25,17 +25,6 @@ interface CreateSubPage {
     url: string;
 }
 
-interface UserCreate {
-    email: string;
-    fio: string;
-    password: string;
-}
-
-interface UserLogin {
-    email: string;
-    password: string;
-}
-
 interface RecordDto {
     id: number;
     title: string;
@@ -49,8 +38,6 @@ interface RecordDto {
     screenshot_timing: number;
 }
 
-let token;
-
 interface AllRecords {
     limit: number;
     offset: number;
@@ -61,27 +48,7 @@ interface PublishedStatus {
     published: boolean;
 }
 
-function getToken() {
-    const token = localStorage.getItem("token");
-    if (token) {
-        return token;
-    }
-    else {
-        setAuthorization(false);
-    }
-}
-
-
-function setToken(token: string) {
-    console.log(token);
-    setAuthorization(true);
-    return localStorage.setItem("token", token);
-}
-function setAuthorization(isAuthorized: boolean) {
-    localStorage.setItem('isAuthorized', JSON.stringify(isAuthorized));
-}
-
-const BASE_URL = "http://95.140.147.162:9999";
+const BASE_URL = "http://larek.itatmisis.ru:12347";
 
 const ApiService = {
     async createSite(data: CreateSite) {
@@ -96,17 +63,26 @@ const ApiService = {
         let result = await response;
         return result;
     },
+    async getWebsiteById(data: number) {
+        const response = await axios.get(`${BASE_URL}/api/v1/websites/${data}`);
+        return response;
+    },
+    async getPagesById(data: number) {
+        const response = await axios.get(`${BASE_URL}/api/v1/pages/${data}`);
+        return response;
+    },
 
+    //old
     async createRecord(data: VideoFormData) {
         // let status = "video added";
-        let config = {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            }
-        }
-        console.log(getToken());
+        // let config = {
+        //     headers: {
+        //         Authorization: `Bearer ${getToken()}`
+        //     }
+        // }
+        // console.log(getToken());
         const response = await axios
-            .post(`${BASE_URL}/api/v1/record/create`, data, config)
+            .post(`${BASE_URL}/api/v1/record/create`, data)
         let result = await response;
         console.log(result);
         console.log(result.data.id);
@@ -114,13 +90,13 @@ const ApiService = {
     },
 
     async createArticle(data: CreateArticleData) {
-        let config = {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            }
-        }
+        // let config = {
+        //     headers: {
+        //         Authorization: `Bearer ${getToken()}`
+        //     }
+        // }
         const response = await axios
-            .post(`${BASE_URL}/api/v1/article/${data.record_id}`, { body: data.body }, config)
+            .post(`${BASE_URL}/api/v1/article/${data.record_id}`, { body: data.body })
         let result = await response;
         return result;
     },
@@ -129,99 +105,59 @@ const ApiService = {
 
     async setPublishedStatus(data: PublishedStatus) {
         // let status = "video added";
-        let config = {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            }
-        }
-        console.log(getToken());
+        // let config = {
+        //     headers: {
+        //         Authorization: `Bearer ${getToken()}`
+        //     }
+        // }
+        // console.log(getToken());
         const response = await axios
-            .post(`${BASE_URL}/api/v1/record/${data.record_id}/published_status?published=${data.published}`, null, config)
+            .post(`${BASE_URL}/api/v1/record/${data.record_id}/published_status?published=${data.published}`, null)
         let result = await response;
         return result;
     },
 
     async getArticle(data: number) {
-        let config = {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            }
-        }
-        const response = await axios.get(`${BASE_URL}/api/v1/article/${data}/main`, config);
+        // let config = {
+        //     headers: {
+        //         Authorization: `Bearer ${getToken()}`
+        //     }
+        // }
+        const response = await axios.get(`${BASE_URL}/api/v1/article/${data}/main`);
         return response;
     },
 
     async getRecordByArticleId(data: number) {
-        let config = {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            }
-        }
-        const response = await axios.get(`${BASE_URL}/api/v1/record/by_article/${data}`, config);
+        // let config = {
+        //     headers: {
+        //         Authorization: `Bearer ${getToken()}`
+        //     }
+        // }
+        const response = await axios.get(`${BASE_URL}/api/v1/record/by_article/${data}`);
         return response;
     },
 
     async getRecordByRecordId(data: number) {
-        let config = {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            }
-        }
-        const response = await axios.get(`${BASE_URL}/api/v1/record/${data}`, config);
+        // let config = {
+        //     headers: {
+        //         Authorization: `Bearer ${getToken()}`
+        //     }
+        // }
+        const response = await axios.get(`${BASE_URL}/api/v1/record/${data}`);
         return response;
     },
 
     async getAllRecords(data: AllRecords): Promise<RecordDto[]> {
-        let config = {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            },
-            params: data
-        }
-        const response = await axios.get(`${BASE_URL}/api/v1/record/all`, config);
+        // let config = {
+        //     headers: {
+        //         Authorization: `Bearer ${getToken()}`
+        //     },
+        //     params: data
+        // }
+        const response = await axios.get(`${BASE_URL}/api/v1/record/all`);
         let result = await response;
         return result.data;
     },
 
-    async getPublishedRecords(data: AllRecords): Promise<RecordDto[]> {
-        let config = {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            },
-            params: data
-        }
-        const response = await axios.get(`${BASE_URL}/api/v1/record/published`, config);
-        let result = await response;
-
-        return result.data;
-    },
-
-    async createUser(data: UserCreate) {
-        const response = await axios
-            .post(`${BASE_URL}/auth/user/create`, data)
-
-        let result = await response;
-        token = result.data.token;
-        setToken(token);
-        setAuthorization(true);
-        return result;
-    },
-
-    async loginUser(data: UserLogin) {
-        let status = "authorized";
-        let config = {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            }
-        }
-        const response = await axios
-            .post(`${BASE_URL}/auth/user/login`, data, config)
-
-        let result = await response;
-        token = result.data.token;
-        setToken(token);
-        setAuthorization(true);
-        return status;
-    },
 };
 export default ApiService;
