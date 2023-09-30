@@ -29,8 +29,11 @@
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
     "draftjs-to-html": "^0.9.1",
+    "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
     "html-react-parser": "^4.0.0",
+    "mobx": "^6.10.2",
+    "mobx-react": "^9.0.1",
     "puppeteer": "^21.3.6",
     "react": "^18.2.0",
     "react-animations": "^1.0.0",
@@ -45,7 +48,8 @@
     "react-spring": "^9.7.1",
     "react-toggle-component": "^3.0.8",
     "react-wavify": "^1.8.2",
-    "styled-components": "^5.3.11"
+    "styled-components": "^5.3.11",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

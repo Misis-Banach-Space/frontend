@@ -72,9 +72,26 @@ const ApiService = {
         const response = await axios.get(`${BASE_URL}/api/v1/websites/${data}`);
         return response;
     },
-    async getPagesById(data: number) {
+    async getAllPagesBySiteId(data: number){
+        const response = await axios.get(`${BASE_URL}/api/v1/pages/by_website/${data}`)
+        return response;
+    },
+    async getPageById(data: number) {
         const response = await axios.get(`${BASE_URL}/api/v1/pages/${data}`);
         return response;
+    },
+    async checkSiteUrl(data: CreateSite) {
+        const response = await axios.post(`${BASE_URL}/api/v1/websites/check_url`, data);
+        return response;
+    },
+    async checkPageUrl(data: CreateSite) {
+        const response = await axios.post(`${BASE_URL}/api/v1/pages/check_url`, data);
+        return response;
+    },
+    async getAllSites(): Promise<RecordDto[]> {
+        const response = await axios.get(`${BASE_URL}/api/v1/websites/all`);
+        let result = await response;
+        return result.data;
     },
 
     //old
@@ -153,13 +170,7 @@ const ApiService = {
     },
 
     async getAllRecords(data: AllRecords): Promise<RecordDto[]> {
-        // let config = {
-        //     headers: {
-        //         Authorization: `Bearer ${getToken()}`
-        //     },
-        //     params: data
-        // }
-        const response = await axios.get(`${BASE_URL}/api/v1/record/all`);
+        const response = await axios.get(`${BASE_URL}/api/v1/websites/all`);
         let result = await response;
         return result.data;
     },

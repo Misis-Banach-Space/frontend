@@ -1,7 +1,6 @@
 import { Button, Typography, Box } from "@mui/material";
 import imgLink from "../assets/siteanalysis.jpg";
 
-
 function HomeContent() {
 
     return (
