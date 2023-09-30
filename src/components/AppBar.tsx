@@ -1,18 +1,14 @@
 import { AppBar, Box, IconButton, Toolbar, Typography, Backdrop } from "@mui/material";
 import { Link } from 'react-router-dom';
-import SignUpForm from "./SignUp";
-import LoginForm from "./Login";
-
-import logo from "../assets/misis.svg";
+import logo from "../assets/kokoc-logo.svg";
 import * as React from 'react';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 
-const pages = [['Главная', '/'], ['Статьи', '/allArticles'], ['Мои Видео', '/myVideos']];
+const pages = [['Главная', '/'], ['Мои Запросы', '/myVideos']];
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -25,15 +21,15 @@ function ResponsiveAppBar() {
         setAnchorElNav(null);
     };
 
-    const [buttonType, setButtonType] = React.useState('');
+    // const [buttonType, setButtonType] = React.useState('');
     const [open, setOpen] = React.useState(false);
     const handleClose = () => {
         setOpen(false);
     };
-    const handleOpen = (type: string) => {
-        setButtonType(type);
-        setOpen(true);
-    };
+    // const handleOpen = (type: string) => {
+    //     setButtonType(type);
+    //     setOpen(true);
+    // };
 
     return (
         <div className="appBarDiv">
@@ -100,7 +96,7 @@ function ResponsiveAppBar() {
                                             key={page[0]}
                                             onClick={handleCloseNavMenu}
                                             sx={{
-                                                my: 2, color: 'white', display: 'block', fontFamily: 'PT Sans Caption',
+                                                my: 2, color: '#1F1B4C', display: 'block', fontFamily: 'PT Sans Caption',
                                                 fontWeight: 700,
                                             }}
                                         >

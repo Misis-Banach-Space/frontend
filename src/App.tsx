@@ -1,12 +1,8 @@
 import HomeHeader from "./pages/HomeHeader";
 import HomeContent from "./pages/HomeContent";
-import Article from "./components/Article";
 import AnalysisContent from "./components/AnalysisContent";
-import ArticlePublic from "./components/ArticlePublic";
 import ArticleHeader from "./components/ArticleHeader";
 import VideosHeader from "./pages/VideosHeader";
-import AllArticlesHeader from "./pages/AllArticlesHeader";
-import AllArticlesContent from "./pages/AllArticlesContent";
 import VideosContent from "./pages/VideosContent";
 import Wave from 'react-wavify'
 import "./App.css";
@@ -20,7 +16,8 @@ function App() {
         <>
             <Container maxWidth="xl" className="gradientSection" fixed={true} style={{ maxWidth: "100%", height: "735px", padding: 0, position: 'relative' }}
                 sx={{
-                    backgroundImage: `linear-gradient(rgba(36, 112, 181, 0.5), rgba(59, 49, 174, 0.5), rgba(85, 12, 100, 0.5), rgba(91, 10, 87, 0.5)), url(${backgroundImage})`,
+                    // backgroundImage: `linear-gradient(rgba(36, 112, 181, 0.5), rgba(59, 49, 174, 0.5), rgba(85, 12, 100, 0.5), rgba(91, 10, 87, 0.5)), url(${backgroundImage})`,
+                    backgroundImage: `linear-gradient(#50B6D7, #BD43B0A6), url(${backgroundImage})`
                 }}>
                 <CustomAppBar />
                 <Routes>
@@ -28,7 +25,6 @@ function App() {
                     <Route path="/article/:id" element={<ArticleHeader/>}/>
                     <Route path="/articlePublic/:id" element={<ArticleHeader/>}/>
                     <Route path="/myVideos" element={<VideosHeader/>}/>
-                    <Route path="/allArticles" element={<AllArticlesHeader/>}/>
                 </Routes>
                 <div style={{ margin: 0, padding: 0, position: 'absolute', bottom: 0, width: '100%', borderBottom: 'none', marginBottom: '-5px' }}>
                     <Wave
@@ -48,9 +44,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<HomeContent/>}/>
                     <Route path="/article/:id" element={<AnalysisContent/>}/>
-                    <Route path="/articlePublic/:id" element={<ArticlePublic/>}/>
                     <Route path="/myVideos" element={<VideosContent/>}/>
-                    <Route path="/allArticles" element={<AllArticlesContent/>}/>
                 </Routes>
             </Container>
             <Container sx={{ backgroundColor: 'black' }} style={{ maxWidth: "100%", height: "251px", padding: 0, margin: 0, position: 'relative' }}>

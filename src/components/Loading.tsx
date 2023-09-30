@@ -4,7 +4,8 @@ import { BarLoader } from "react-spinners";
 import { useState, useEffect } from 'react'
 import { Blob } from 'react-blob'
 import { CSSTransition } from "react-transition-group";
-import logo from "../assets/logo_with_text.svg";
+import kokoc from "../assets/kokoc-logo.svg"
+// import logo from "../assets/logo_with_text.svg";
 
 const texts = ["Осталось совсем чуть-чуть", "Скоро случится чудо", "Магия на подходе", 'Ты уже почти у цели!', "Все приходит вовремя для того, кто умеет ждать )"];
 
@@ -58,7 +59,7 @@ const LoadingScreen = () => {
                     aria-label="menu"
                     sx={{ mr: 2, ml: 1 }}
                 >
-                    <img width="40px" height="40px" src={logo} alt="logo" style={{ width: '239px', height: '77px' }}/>
+                    <img width="40px" height="40px" src={kokoc} alt="logo" style={{ width: '239px', height: '77px' }}/>
                 </IconButton>
                 <Container sx={{
                     display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -104,36 +105,9 @@ const LoadingScreen = () => {
                                 {text}
                             </Typography>
                         </CSSTransition>
-                        {/* <Typography variant="body1"
-                            sx={{
-                                flexGrow: 1,
-                                fontFamily: 'Noto Sans',
-                                fontWeight: 300,
-                                fontSize: 16,
-                                color: 'white',
-                                textDecoration: 'none',
-                                mt: 2
-                            }}
-                            style={{ opacity: index >= 0 && index < texts.length && index % 2 == 0 ? 1 : 0.5, transition: "opacity 0.1s ease" }}
-                        >
-                            {texts[index]}
-                            {/* Осталось совсем чуть-чуть */}
-                        {/* </Typography> */}
                         {createMultipleBlobs(6)}
                     </Box>
                 </Container>
-                {/* <Blob size="50vh"
-                    style={{
-                        position: 'absolute',
-                        top: '80%',
-                        right: '20%',
-                        zIndex: 999,
-                        backgroundColor: '#F3CF8E',
-                        color: 'white',
-                        opacity: 0.4,
-                        fontSize: '50vh',
-                    }}
-                /> */}
             </Container >
         </>
     )

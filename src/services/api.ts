@@ -21,6 +21,9 @@ interface CreateArticleData {
 interface CreateSite {
     url: string;
 }
+interface CreateSubPage {
+    url: string;
+}
 
 interface UserCreate {
     email: string;
@@ -81,6 +84,19 @@ function setAuthorization(isAuthorized: boolean) {
 const BASE_URL = "http://95.140.147.162:9999";
 
 const ApiService = {
+    async createSite(data: CreateSite) {
+        const response = await axios
+            .post(`${BASE_URL}/api/v1/websites/create`, data)
+        let result = await response;
+        return result;
+    },
+    async createSubPage(data: CreateSubPage) {
+        const response = await axios
+            .post(`${BASE_URL}/api/v1/pages/create`, data)
+        let result = await response;
+        return result;
+    },
+
     async createRecord(data: VideoFormData) {
         // let status = "video added";
         let config = {
@@ -105,13 +121,6 @@ const ApiService = {
         }
         const response = await axios
             .post(`${BASE_URL}/api/v1/article/${data.record_id}`, { body: data.body }, config)
-        let result = await response;
-        return result;
-    },
-
-    async createSite(data: CreateSite) {
-        const response = await axios
-            .post(`${BASE_URL}/api/v1/websites/create`, data)
         let result = await response;
         return result;
     },

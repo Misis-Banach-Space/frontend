@@ -1,15 +1,15 @@
-import { useParams } from "react-router-dom";
-import ApiService from "../services/api";
-import { useEffect, useState } from "react";
-import { Button, Box, Typography } from "@mui/material";
-import YouTubeIcon from '@mui/icons-material/YouTube';
+// import { useParams } from "react-router-dom";
+// import ApiService from "../services/api";
+// import { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
+// import YouTubeIcon from '@mui/icons-material/YouTube';
 
-const article = {
-    title: 'Сгенерированная Статья',
-    video_link: 'https://www.youtube.com/watch?v=Ta6pNPK3wig&t=2s',
-    date: '24.06.2023',
-    html_data: ''
-}
+// const article = {
+//     title: 'Сгенерированная Статья',
+//     video_link: 'https://www.youtube.com/watch?v=Ta6pNPK3wig&t=2s',
+//     date: '24.06.2023',
+//     html_data: ''
+// }
 
 function ArticleHeader() {
 

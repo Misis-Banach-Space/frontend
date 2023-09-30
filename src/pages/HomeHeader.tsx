@@ -1,11 +1,10 @@
-import * as React from 'react';
 import { Button, Typography, Box } from "@mui/material";
-import main from "../assets/main-img.svg";
+import { useState } from 'react';
 
 import VideoForm from "../components/VideoForm";
 
 function Home() {
-    const [isBoxVisible, setIsBoxVisible] = React.useState(true);
+    const [isBoxVisible, setIsBoxVisible] = useState(true);
 
     const handleClick = () => {
       setIsBoxVisible(false);
@@ -15,7 +14,7 @@ function Home() {
         <>
             <Box maxWidth="1200px" sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' }, justifyContent: 'flex-start' , margin: '0 auto'}}>
             {isBoxVisible ? (
-                <Box sx={{ width: '760px' }} mt={15} ml={4}>
+                <Box sx={{ width: '760px' }} mt={15} ml={10}>
                     <Typography
                         variant="h1"
                         component="a"
@@ -47,15 +46,10 @@ function Home() {
                             его пренадлежность к категории и получать детальный анализ
                         </Typography>
                     </Box>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' }, justifyContent: 'space-evenly' , margin: '0 auto', width: '700px', position: 'absolute', left: 0, right: 0}}>
-                        <Button className="gradientButton" style={{ borderRadius: '20px', color: 'white', fontWeight: '700'}} sx={{ mt: 5 }} onClick={handleClick}>Анализ сайта</Button>
-                        <Button className="gradientButton" style={{ borderRadius: '20px', color: 'white', fontWeight: '700'}} sx={{ mt: 5 }} onClick={handleClick}>Анализ сайта</Button>
-                        <Button className="gradientButton" style={{ borderRadius: '20px', color: 'white', fontWeight: '700'}} sx={{ mt: 5 }} onClick={handleClick}>Анализ сайта</Button>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } , margin: '0 auto', width: '700px', position: 'absolute', left: 0, right: 0}}>
+                        <Button className="gradientButton" style={{ borderRadius: '20px', color: 'white', fontWeight: '700'}} sx={{ mt: 5 }} onClick={handleClick}>Анализ сайтов</Button>
                     </Box>
                 </Box> ) : (<VideoForm />) }
-                {/* <Box>
-                    <img src={main} alt="AI generating summary from video" width="500px" height="400px"></img>
-                </Box> */}
             </Box>
         </>
     );

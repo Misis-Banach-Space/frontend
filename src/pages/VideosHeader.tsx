@@ -19,7 +19,7 @@ function Home() {
                             textDecoration: 'none',
                         }}
                     >
-                        Мои Видео
+                        Мои Запросы
                     </Typography>
                     <Box>
                         <Typography variant="body1"
@@ -33,7 +33,7 @@ function Home() {
                                 mt: 2
                             }}
                         >
-                            Каталог статей, сгенерированных вами по видео
+                            Получите тематику для запрашиваемых сайтов и аналитические данные о них
                         </Typography>
                     </Box>
                 </Box>

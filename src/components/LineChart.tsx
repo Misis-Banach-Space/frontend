@@ -1,27 +1,46 @@
-import React from "react";
-import Chart from "chart.js/auto";
 import { Line } from "react-chartjs-2";
+import { useEffect, useState } from 'react';
+import { ChartData } from 'chart.js';
 
 
-const labels = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July'
-  ];
-const data = {
-  labels: labels,
-  datasets: [{
-    label: 'My First Dataset',
-    data: [65, 59, 80, 81, 56, 55, 40],
-    fill: false,
-    borderColor: 'rgb(75, 192, 192)',
-    tension: 0.1
-  }]
+interface Props {
+  data: {[month: string]: number[];}
+}
+
+const emptyData: ChartData<"line", number[], string> = {
+  labels: [],
+  datasets: []
 };
 
-const LineChart = () => {
+const LineChart = (props: Props) => {
+  const { data } = props;
+  const [dataChart, setDataChart] = useState<ChartData<"line", number[], string>>(emptyData);
+
+  useEffect(() => {
+    const labels = Object.keys(data)
+    const visits = Object.values(data).map((val) => val[0]);
+    console.log(visits)
+
+    const dataChart = {
+      labels: labels,
+      datasets: [{
+        label: 'Посещаемость',
+        data: visits,
+        fill: true,
+        backgroundColor: '#B7DAE4',
+        borderColor: 'rgb(75, 192, 192)',
+        borderWidth: 4,
+        tension: 0.1, 
+        responsive: true, 
+      }]
+    };
+
+    setDataChart(dataChart);
+}, []);
+
   return (
-    <div>
-      <Line data={data} />
+    <div style={{width: '500px'}}>
+      <Line data={dataChart} />
     </div>
   );
 };

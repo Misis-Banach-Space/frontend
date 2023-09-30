@@ -2,7 +2,7 @@ import { Container } from "@mui/material";
 import { useState, useEffect } from "react";
 import VideoCard from "../components/VideoCard";
 import { Pagination } from "@mui/material";
-import ApiService from "../services/api";
+// import ApiService from "../services/api";
 
 
 const article = {
@@ -27,7 +27,7 @@ const videosPerPage = 3;
 function VideoContent() {
     const [page, setPage] = useState(1);
     const [dataRecords, setDataRecords] = useState<MyObject[]>([]);
-    const [count, setCount] = useState(0)
+    // const [count, setCount] = useState(0)
 
     const handlePageChange = (
         event: React.ChangeEvent<unknown>,
