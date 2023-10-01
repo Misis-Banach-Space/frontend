@@ -7,11 +7,12 @@
   </h2>
 </div>
 
-# ![Сервис]('src/assets/screenshots/siteAnalysis.jpg')
-<img src='src/assets/screenshots/Competitors.jpg'>
-<img src='src/assets/Competitors.jpg'>
-<img src='./src/assets/Competitors.jpg'>
-<img src='../src/assets/Competitors.jpg'>
+# ![Сервис]('src/assets/screenshots/1.jpg')
+<img src='src/assets/screenshots/1.jpg'>
+<img src='src/assets/screenshots/2.jpg'>
+<img src='src/assets/screenshots/3.jpg'>
+<img src='src/assets/screenshots/4.jpg'>
+<img src='src/assets/screenshots/5.jpg'>
 
 # Сервис по определению тематики сайта
 <table>
@@ -23,6 +24,7 @@
 </table>
 
 ## Функционал
+
 
 
 ### Технологии

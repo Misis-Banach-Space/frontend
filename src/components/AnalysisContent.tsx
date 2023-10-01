@@ -8,7 +8,7 @@ import { CategoryScale } from "chart.js";
 import LineChart from "./LineChart";
 import MapChart from "./MapChart";
 // import dataExample from './data'
-// import DataTable from './DataTable';
+import DataTable from './DataTable';
 import PageTable from './PageTable';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx'
@@ -36,6 +36,7 @@ function AnalysisContent() {
   const [competitiors, setCompetitors] = useState([]);
   const [visitsMonth, setVisitsMonth] = useState<{ [month: string]: number[]; }>();
   const [visistsCountry, setVisitsCountry] = useState<{ [country: string]: number[]; }>();
+  const [yandex, setYandex] = useState<{ [country: string]: number[]; }>();
 
   
   
@@ -84,6 +85,7 @@ function AnalysisContent() {
             setCompetitors(response.data.stats.competitiors)
             setVisitsMonth(response.data.stats.visits_by_month)
             setVisitsCountry(response.data.stats.visits_by_country)
+            setYandex(response.data.stats.yandex_request)
           }
         }
       }
@@ -432,7 +434,7 @@ function AnalysisContent() {
               <MapChart data={visistsCountry || {}} />
             </Box>
           </Box>
-          {/* <Box sx={{ width: '1300px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }} mb={5}>
+          <Box sx={{ width: '1300px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }} mb={5}>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Typography variant="h2"
                 sx={{
@@ -467,8 +469,8 @@ function AnalysisContent() {
               </Typography>
 
             </Box>
-            <DataTable data={dataExample.yandex_request} />
-          </Box> */}
+            <DataTable data={yandex} />
+          </Box>
 
         </>}
     </>
