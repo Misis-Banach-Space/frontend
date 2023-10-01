@@ -7,8 +7,8 @@
   </h2>
 </div>
 
-# ![Сервис]('src/assets/screenshots/siteAnalysis/jpg')
-<img src='src/assets/screenshots/Competitors/jpg'>
+# ![Сервис]('src/assets/screenshots/siteAnalysis.jpg')
+<img src='src/assets/screenshots/Competitors.jpg'>
 
 # Сервис по определению тематики сайта
 <table>
