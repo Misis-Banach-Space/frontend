@@ -16,6 +16,7 @@ const VideoForm = observer(() => {
     const [error3, setError3] = useState(false);
     const [helperText3, setHelperText3] = useState('');
     const [diasableButton, setdisableButton] = useState(false)
+    const [disableUploadButton, setDisableUploadButton] = useState(false);
 
     function isDomainOnlyUrl(url: string): boolean {
         const pattern = /^(http|https):\/\/[^\/]*\/?$/;
@@ -27,6 +28,7 @@ const VideoForm = observer(() => {
         let linkSet = new Set<string>();
 
         const urlRegex = /^(https?|http):\/\/[^\s/$.?#].[^\s]*$/i;
+        let isInvalidFormat = false;
         for (let line of lines) {
             line = line.trim()
             if (
@@ -36,16 +38,25 @@ const VideoForm = observer(() => {
             ) {
                 setError3(false);
                 setHelperText3('');
-                setdisableButton(false)
-                console.log(line)
+                console.log('sfffff')
                 linkSet.add(line);
-
             } else {
                 setError3(true);
-                setdisableButton(true);
+                console.log('jfjf')
+                isInvalidFormat = true;
                 setHelperText3('Неверный формат ввода ссылки. Вводите каждую ссылку с новой строки');
             }
+            if (inputText.trim() === '') {
+                setError3(false);
+                setHelperText3('');
+                console.log('jdgf')
+                // setdisableButton(false);
+                isInvalidFormat = false;
+                setDisableUploadButton(false);
+              }
         }
+        // setdisableButton(inputText.trim() !== '' && !selectedFile);
+        setDisableUploadButton(inputText.trim() !== '' || isInvalidFormat);
         setLinkArr(Array.from(linkSet));
     }
 
@@ -64,77 +75,65 @@ const VideoForm = observer(() => {
     // handle submit
     async function handleSubmit() {
         let errorEmpty = false;
+        let Urls = [];
+        if (selectedFile) Urls = uploadedFiles;
+        else Urls = linkArr;
         // check if link valid
         if (!linkArr) {
             setError3(true);
             errorEmpty = true;
-            setdisableButton(true)
+            console.log('klfsfl')
+            // setdisableButton(true)
             setHelperText3("Введите ссылки на сайты. Каждая ссылка в новой строке");
         } else {
             setError3(false);
             errorEmpty = false;
             setHelperText3("");
-            setdisableButton(false);
+            // setdisableButton(false);
         }
         if (!error3 && !errorEmpty) {
             let sites = [];
             let pages = [];
-            for (let i = 0; i < linkArr.length; i++) {
-                if (isDomainOnlyUrl(linkArr[i])) {
-                    if (linkArr[i].endsWith("/")) {
-                        linkArr[i] = linkArr[i].slice(0, -1);
+            for (let i = 0; i < Urls.length; i++) {
+                if (isDomainOnlyUrl(Urls[i])) {
+                    if (Urls[i].endsWith("/")) {
+                        Urls[i] = Urls[i].slice(0, -1);
                     }
-                    linkArr[i] = linkArr[i].trim();
-                    console.log(linkArr[i], '12345678')
+                    Urls[i] = Urls[i].trim();
                     try {
                         let response = await ApiService.createSite({
-                            url: linkArr[i],
+                            url: Urls[i],
                         });
-                        console.log(response)
-                        if (response.status === 201) {
-                            console.log("siteeeeeee", response.data);
-                        }
-                        sites.push({ data: response.data, timestamp: formatTime(new Date()), url: linkArr[i] });
+                        sites.push({ data: response.data, timestamp: formatTime(new Date()), url: Urls[i] });
                     } catch (error) {
                         let response = await ApiService.checkSiteUrl({
-                            url: linkArr[i],
+                            url: Urls[i],
                         });
-                        console.log(response)
-                        if (response.status === 200) {
-                            console.log("siteeeeeee exists", response.data);
-                        }
-                        sites.push({ data: response.data.id, timestamp: formatTime(new Date()), url: linkArr[i] });
-                        console.log(error)
+                        sites.push({ data: response.data.id, timestamp: formatTime(new Date()), url: Urls[i] });
                     }
                 }
                 else {
-                    if (linkArr[i].endsWith("/")) {
-                        linkArr[i] = linkArr[i].slice(0, -1);
+                    if (Urls[i].endsWith("/")) {
+                        Urls[i] = Urls[i].slice(0, -1);
                     }
-                    linkArr[i] = linkArr[i].trim();
+                    Urls[i] = Urls[i].trim();
                     try {
                         let response = await ApiService.createSubPage({
-                            url: linkArr[i],
+                            url: Urls[i],
                         });
-                        console.log(response)
-                        if (response.status === 201) {
-                            console.log("paaaaaaage", response.data);
-                        }
-                        pages.push({ data: response.data, timestamp: formatTime(new Date()), url: linkArr[i] });
+
+                        pages.push({ data: response.data, timestamp: formatTime(new Date()), url: Urls[i] });
                     } catch (error) {
                         let response = await ApiService.checkPageUrl({
-                            url: linkArr[i],
+                            url: Urls[i],
                         });
-                        console.log(response)
-                        if (response.status === 200) {
-                            console.log("page exists", response.data);
-                        }
-                        pages.push({ data: response.data.id, timestamp: formatTime(new Date()), url: linkArr[i] });
-                        console.log(error)
+
+                        pages.push({ data: response.data.id, timestamp: formatTime(new Date()), url: Urls[i] });
+
                     }
                 }
             }
-            if(sites.length + pages.length === linkArr.length && linkArr.length !== 0) navigate(`myVideos`);
+            if (sites.length + pages.length === Urls.length && Urls.length !== 0) navigate(`myVideos`);
             // if (sites.length + pages.length === linkArr.length) navigate(`myVideos`);
             LocalStorage.updateArrays(sites, pages);
             // ArrayStore.updateArraysLater(sites, pages)
@@ -144,9 +143,47 @@ const VideoForm = observer(() => {
     }
 
     const [selectedFile, setSelectedFile] = useState(null);
+    const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
     const [errorText, setErrorText] = useState('');
     const [textFieldDisabled, setTextFieldDisabled] = useState(false);
 
+    // function parseCSV(csvData: string): string[] {
+    //     const lines = csvData.split('\n');
+    //     const urls: string[] = [];
+    //     for (const line of lines) {
+    //         const columns = line.split(',');
+    //         for (const column of columns) {
+    //             const trimmedColumn = column.trim();
+    //             if (trimmedColumn) {
+    //                 urls.push(trimmedColumn);
+    //             }
+    //         }
+    //     }
+    //     return urls;
+    // }
+
+    function parseCSV(csvData: string): { columns: number, urls: string[] } {
+        const lines = csvData.split('\n');
+        const urls: string[] = [];
+        let columns = 0;
+      
+        for (const line of lines) {
+          const columnsInLine = line.split(',');
+          if (columnsInLine.length > columns) {
+            columns = columnsInLine.length;
+          }
+      
+          for (const column of columnsInLine) {
+            const trimmedColumn = column.trim();
+            if (trimmedColumn) {
+              urls.push(trimmedColumn);
+            }
+          }
+        }
+      
+        return { columns, urls };
+      }
+      
     const handleFileInputChange = (e: any) => {
         const file = e.target.files[0];
         if (!file) {
@@ -154,76 +191,42 @@ const VideoForm = observer(() => {
             setErrorText('');
             return;
         }
-        const allowedExtensions = ['.csv', '.xlsx', '.xlsm'];
+        const allowedExtensions = ['.csv'];
         const fileExtension = file.name.split('.').pop();
         if (!allowedExtensions.includes(`.${fileExtension}`)) {
             setSelectedFile(null);
             setErrorText('Неверный формат, пожалуйста загрузите файл типа: .csv, .xlsx, or .xlsm');
+            setdisableButton(true);
             return;
         }
         setSelectedFile(file);
         setErrorText('');
-        setTextFieldDisabled(true)
-        setdisableButton(false)
-    }
-    // async function handleFileUpload(event: any){
-    //     const file = event.target.files[0];
-    //     if (file) {
-    //         const fileExtension = file.name.split('.').pop().toLowerCase();
-        
-    //         if (fileExtension === 'csv' || fileExtension === 'xlsx') {
-    //           try {
-    //             const urls = await parseFileAndGetUrls(file, fileExtension);
-    //             if (urls.length > 0) {
-    //               await processUrls(urls);
-    //             } else {
-    //               console.error('No valid URLs found in the file.');
-    //             }
-    //           } catch (error) {
-    //             console.error('Error parsing the file:', error);
-    //           }
-    //         } else {
-    //           console.error('Unsupported file format. Please select a .csv or .xlsx file.');
-    //         }
-    //       }
-    // }
-    // async function parseFileAndGetUrls(file, fileExtension) {
-    //     if (fileExtension === 'csv') {
-    //       const csvData = await parseCsv(file);
-    //       return csvData.map((row) => row.url);
-    //     } else if (fileExtension === 'xlsx') {
-    //       const xlsxData = await parseXlsx(file);
-    //       return xlsxData.map((cell) => cell.url);
-    //     }
-    //   }
+        setTextFieldDisabled(true);
+        const reader = new FileReader();
+        reader.onload = (event: any) => {
+            const csvData = event.target.result as string;
+            const fileObjects = parseCSV(csvData);
+            if (validateCSV(fileObjects)) {
+                setdisableButton(false);
+                setUploadedFiles(fileObjects.urls);
+                console.log('Parsed CSV data:', fileObjects.urls);
+            } else {
+                setErrorText('CSV файл должен содержать только одну колонку с URL.');
+                setdisableButton(true);
+            }
+        };
+        reader.readAsText(file);
+    };
 
-    //   async function parseCsv(file) {
-    //     return new Promise((resolve, reject) => {
-    //       const results = [];
-      
-    //       fs.createReadStream(file)
-    //         .pipe(csv())
-    //         .on('data', (row) => {
-    //           // Assuming your CSV file has a header row with a column named 'url'
-    //           const url = row.url;
-    //           if (url && isURLValid(url)) { // You can implement isURLValid to check if the URL is valid
-    //             results.push({ url });
-    //           }
-    //         })
-    //         .on('end', () => {
-    //           resolve(results);
-    //         })
-    //         .on('error', (error) => {
-    //           reject(error);
-    //         });
-    //     });
-    //   }
+    function validateCSV(fileData: { columns: number, urls: string[] }): boolean {
+        return fileData.columns === 1;
+    }
 
 
     return (
         <Box flexDirection={'column'} alignItems='center' justifyContent="center" sx={{ display: 'flex' }}>
             <Paper elevation={6}
-                sx={{ mt: 5, ml: 8 }}
+                sx={{ ml: 8 }}
                 style={{
                     width: '600px', minHeight: '310px', borderRadius: '30px'
                 }}>
@@ -245,7 +248,7 @@ const VideoForm = observer(() => {
                 </Typography>
                 <Box display="flex" alignItems="center" justifyContent="center" flexDirection={'column'} sx={{ mt: 3 }}>
                     <TextField multiline rows={6} onChange={handleMultipleLinksChange} error={error3} helperText={helperText3} disabled={textFieldDisabled}
-                        id="outlined-basic" label="Ввелите ссылки(каждая ссылка с новой строки)" variant="outlined" sx={{ mt: 1, width: '460px' }}
+                        id="outlined-basic" label="Введите ссылки(каждая ссылка с новой строки)" variant="outlined" sx={{ mt: 1, width: '460px' }}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -254,8 +257,9 @@ const VideoForm = observer(() => {
                                         type="file"
                                         id="fileInput"
                                         style={{ display: 'none' }}
-                                        accept=".csv, .xlsx, .xlsm"
+                                        accept=".csv"
                                         onChange={handleFileInputChange}
+                                        disabled={disableUploadButton}
                                     />
                                 </InputAdornment>
                             ),
@@ -266,13 +270,16 @@ const VideoForm = observer(() => {
                             variant="outlined"
                             color="secondary"
                             startIcon={<CloudUploadIcon />}
-
+                            disabled={disableUploadButton}
                         >
                             Upload Files
                         </Button>
                     </label>
                     <Typography variant="body2" color="error">
                         {errorText}
+                    </Typography>
+                    <Typography sx={{mb: 2}} variant="body2" color="textSecondary">
+                        Требуется файл типа .csv (один столбец с нужными ссылками)
                     </Typography>
                     {selectedFile && (
                         <Paper elevation={3} sx={{ mb: 2, padding: '10px', display: 'flex', alignItems: 'center' }}>

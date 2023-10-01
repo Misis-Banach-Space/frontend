@@ -100,7 +100,6 @@ function Article() {
                 }
             );
             let result = await response;
-            console.log(result);
         }
         else {
             setIsPublished(false);
@@ -111,7 +110,6 @@ function Article() {
                 }
             );
             let result = await response;
-            console.log(result);
         }
     }
 

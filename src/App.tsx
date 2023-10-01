@@ -4,6 +4,8 @@ import AnalysisContent from "./components/AnalysisContent";
 import ArticleHeader from "./components/ArticleHeader";
 import VideosHeader from "./pages/VideosHeader";
 import VideosContent from "./pages/VideosContent";
+import CategoryHeader from "./pages/CategoryHeader"
+import CategoryContent from "./pages/CategoryContent"
 import Wave from 'react-wavify'
 import "./App.css";
 import CustomAppBar from "./components/AppBar";
@@ -25,6 +27,7 @@ function App() {
                     <Route path="/article/:id" element={<ArticleHeader/>}/>
                     <Route path="/articlePublic/:id" element={<ArticleHeader/>}/>
                     <Route path="/myVideos" element={<VideosHeader/>}/>
+                    <Route path="/categories" element={<CategoryHeader/>}/>
                 </Routes>
                 <div style={{ margin: 0, padding: 0, position: 'absolute', bottom: 0, width: '100%', borderBottom: 'none', marginBottom: '-5px' }}>
                     <Wave
@@ -45,6 +48,7 @@ function App() {
                     <Route path="/" element={<HomeContent/>}/>
                     <Route path="/article/:id" element={<AnalysisContent/>}/>
                     <Route path="/myVideos" element={<VideosContent/>}/>
+                    <Route path="/categories" element={<CategoryContent/>}/>
                 </Routes>
             </Container>
             <Container sx={{ backgroundColor: 'black' }} style={{ maxWidth: "100%", height: "251px", padding: 0, margin: 0, position: 'relative' }}>

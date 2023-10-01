@@ -48,7 +48,7 @@ interface PublishedStatus {
     published: boolean;
 }
 
-const BASE_URL = "http://larek.itatmisis.ru:12347";
+const BASE_URL = "http://larek.itatmisis.ru:5000";
 
 const ApiService = {
     async createSite(data: CreateSite) {

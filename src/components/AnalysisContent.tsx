@@ -24,7 +24,6 @@ interface PageDataItem {
 
 function AnalysisContent() {
   let { id } = useParams<{ id: string }>();
-  console.log(id)
   const rawData = (dataExample.competitiors);
   const generateCompetitorPapers = () => {
     return rawData.map((competitor, index) => (
@@ -52,6 +51,7 @@ function AnalysisContent() {
   const [websiteCategory, setwebsiteCategory] = useState('')
   const [websiteTheme, setwebsiteTheme] = useState('')
   const [websiteUrl, setwebsiteUrl] = useState('')
+  const [websiteStats, setwebsiteStats] = useState<any>(null)
   const [pageUrls, setPageUrls] = useState<string[]>([]);
   const [pageThemes, setPageThemes] = useState<string[]>([])
   const [pageCategories, setPageCategories] = useState<string[]>([])
@@ -61,11 +61,11 @@ function AnalysisContent() {
       try {
         const response = await ApiService.getWebsiteById(Number(id));
         if (response.status === 200) {
-          console.log('heeerrrrr');
           console.log(response.data);
           setwebsiteUrl(response.data.url)
           setwebsiteCategory(response.data.category)
           setwebsiteTheme(response.data.theme)
+          setwebsiteStats(response.data.stats)
         }
       }
       catch (error) {
@@ -78,9 +78,6 @@ function AnalysisContent() {
       try {
         const response = await ApiService.getAllPagesBySiteId(Number(id));
         if (response.status === 200) {
-          console.log('data collected');
-          console.log(response);
-          console.log(response.data[0].url)
           const extractedUrls = response.data.map((it: PageDataItem) => it.url)
           setPageUrls(extractedUrls)
           const extractedThemes = response.data.map((it: PageDataItem) => it.theme)
@@ -108,7 +105,6 @@ function AnalysisContent() {
     const theme = pageThemes[i] || '';
     combinedData.push([url, category, theme]);
   }
-  console.log(combinedData)
 
   //Downloading
   const handleDownload = (format: 'csv' | 'json' | 'xlsx') => {
@@ -180,7 +176,7 @@ function AnalysisContent() {
                   textDecoration: 'none',
                 }}
               >
-                {/* {dataExample.title} */}
+                {websiteStats ? websiteStats.title : ''}
               </Typography>
             </Box>
             <Box>
@@ -195,7 +191,7 @@ function AnalysisContent() {
                   mt: 2
                 }}
               >
-                {/* {dataExample.description} */}
+                {websiteStats ? websiteStats.description : ''}
               </Typography>
             </Box>
             <Grid container spacing={2}>

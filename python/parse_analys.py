@@ -1,16 +1,20 @@
 import requests
-import pandas as pd
 from bs4 import BeautifulSoup
 import re
 import ast
 
-LINK = 'https://misis.ru'
+LINK = 'https://med-elearn.ru/'
 DOMAIN_NAME = re.findall(r'([\w.-]+\.[\w.-]+)', LINK)[0]
 
 
 def get_soup(DOMAIN_NAME):
     URL = f'https://be1.ru/stat/{DOMAIN_NAME}'
     req = requests.get(URL)
+    soup = BeautifulSoup(req.text, "html.parser")
+    return soup
+
+def get_soupBase(LINK):
+    req = requests.get(LINK)
     soup = BeautifulSoup(req.text, "html.parser")
     return soup
 
@@ -50,37 +54,61 @@ def get_stats(soup):
 
 
 def main():
-    soup = get_soup(DOMAIN_NAME)
-    data_table = get_yandex_requests_data(soup)
-    dict_list, domain_names = get_stats(soup)
+    soupBase = get_soupBase(LINK)
+    title = soupBase.title.string if soupBase.title else None
 
-    data = {
-        'title': soup.find(id="set_title").text,
-        'description': soup.find(id="set_description").text,
-        'vozrast': soup.find(id="set_vozrast").text,
-        'page_size': soup.find(id="set_page_size").text,
-        'page_load_time': soup.find(id="set_page_load_time").text,
-        'ip': soup.find(id="set_site_ip").text,
-        'yandex_iks': soup.find(id="set_iks").text.replace('\n', ''),
-        'competitiors': domain_names,
-        'yandex_request': data_table,
-    }
+    # Получение description
+    description_tag = soupBase.find('meta', attrs={'name': 'description'})
+    description = description_tag['content'] if description_tag else None
 
-    for el in dict_list:
-        if 'Year' in el:
-                if el['Year'][0] == 'Количество запросов':
-                    el['Title'] = el.pop('Year')
-                    data['requests'] = el
-                elif el['Year'][0] == 'Количество заходов':
-                    el['Title'] = el.pop('Year')
-                    data['visits_by_month'] = el
-        elif 'Country' in el:
-            el['Title'] = el.pop('Country')
-            data['visits_by_country'] = el
+    print(f"Title: {title}")
+    print(f"Description: {description}")
 
-    with open('data.txt', 'w') as f:
-        for key, value in data.items():
-            f.write(f'{key}: {value}\n')
+    tags = ['div', 'p', 'span']
+    result = ""
+    for tag in tags:
+        elements = soupBase.find_all(tag)
+        for element in elements:
+            if len(element.text) > 300:
+                result += element.text + " "
+                result = re.sub(r'\s+', ' ', result)
+        if len(result) > 1000:
+            break
+    result = result[:500]
+    result = re.sub(r'[^\w\s.,;:!?-]', '', result)
+    print(result)
+
+    # soup = get_soup(DOMAIN_NAME)
+    # data_table = get_yandex_requests_data(soup)
+    # dict_list, domain_names = get_stats(soup)
+
+    # data = {
+    #     'title': soup.find(id="set_title").text,
+    #     'description': soup.find(id="set_description").text,
+    #     'vozrast': soup.find(id="set_vozrast").text,
+    #     'page_size': soup.find(id="set_page_size").text,
+    #     'page_load_time': soup.find(id="set_page_load_time").text,
+    #     'ip': soup.find(id="set_site_ip").text,
+    #     'yandex_iks': soup.find(id="set_iks").text.replace('\n', ''),
+    #     'competitiors': domain_names,
+    #     'yandex_request': data_table,
+    # }
+
+    # for el in dict_list:
+    #     if 'Year' in el:
+    #             if el['Year'][0] == 'Количество запросов':
+    #                 el['Title'] = el.pop('Year')
+    #                 data['requests'] = el
+    #             elif el['Year'][0] == 'Количество заходов':
+    #                 el['Title'] = el.pop('Year')
+    #                 data['visits_by_month'] = el
+    #     elif 'Country' in el:
+    #         el['Title'] = el.pop('Country')
+    #         data['visits_by_country'] = el
+
+    # with open('data.txt', 'w') as f:
+    #     for key, value in data.items():
+    #         f.write(f'{key}: {value}\n')
 
 if __name__ == "__main__":
     main()

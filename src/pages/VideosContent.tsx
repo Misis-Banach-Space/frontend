@@ -46,17 +46,9 @@ function VideoContent() {
     const [pageRequest, setPageRequest] = useState<{ data: any; timestamp: string; url: string }[]>(LocalStorage.array2);
     const isFirstRender = useRef(true);
 
-    const handlePageChange = (
-        event: React.ChangeEvent<unknown>,
-        value: number
-    ) => {
-        setPage(value);
-        console.log(event)
-    };
 
-    useEffect(() => {
-        
-    }, [updateRequest]);
+
+
     
     useEffect(() => {
         // Retrieve data from session storage
@@ -68,14 +60,24 @@ function VideoContent() {
     }, []);
 
     useEffect(() => {
+        let timerId: any;
         if (typeof (EventSource) !== "undefined") {
             var source = new EventSource("http://larek.itatmisis.ru:12347/api/v1/websites/sse_update");
             source.onmessage = function (event) {
-                console.log(event.data)
-                // setUpdateRequest(true);
+                console.log(event.data);
+                clearTimeout(timerId);
+                timerId = setTimeout(() => {
+                    console.log('timeout')
+                    console.log(updateRequest)
+                    setUpdateRequest(prevValue => {
+                        return !prevValue;
+                    });
+                }, 2000);
             };
         }
+        return () => clearTimeout(timerId);
     }, []);
+    
 
     useEffect(() => {
         
@@ -98,19 +100,14 @@ function VideoContent() {
         //         // setUpdateRequest(true);
         //     };
         // }
-
+        console.log('HEREEEEE')
         const fetchData1 = async () => {
             const storedArray1 = sessionArray1.get();
             for (let i = 0; i < storedArray1.length; i++) {
                 let id = Number(String(storedArray1[i].data));
-                console.log(storedArray1[i].data);
-                console.log(id, 'id');
+                        
                 try {
                     let response = await ApiService.getWebsiteById(id);
-                    console.log(response);
-                    if (response.status === 200) {
-                        console.log('siteeeeeee data', response.data);
-                    }
                     sites.push(response.data);
                 } catch (error) {
                     console.log(error);
@@ -124,14 +121,8 @@ function VideoContent() {
             const storedArray2 = sessionArray2.get();
             for (let i = 0; i < storedArray2.length; i++) {
                 let id = Number(String(storedArray2[i].data));
-                console.log(storedArray2[i].data);
-                console.log(id, 'id');
                 try {
                     let response = await ApiService.getPageById(id);
-                    console.log(response);
-                    if (response.status === 200) {
-                        console.log('page data', response.data);
-                    }
                     pages.push(response.data);
                 } catch (error) {
                     console.log(error);
@@ -140,7 +131,7 @@ function VideoContent() {
             setPageRecords(pages);
         };
         fetchData2();
-    }, []);
+    }, [updateRequest]);
 
     //making CombinedData
     const newData = [...siteRecords, ...pageRecords]
@@ -202,7 +193,7 @@ function VideoContent() {
                         <VideoCard
                             link={site.url}
                             title={''}
-                            category={''}
+                            category={site.category}
                             site_id={site.id}
                             page_id={0}
                             time={timestamp}
@@ -219,7 +210,7 @@ function VideoContent() {
                         <VideoCard
                             link={site.url}
                             title={''}
-                            category={''}
+                            category={site.category}
                             site_id={site.websiteId}
                             page_id={site.id}
                             time={timestamp}

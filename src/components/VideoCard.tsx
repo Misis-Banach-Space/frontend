@@ -156,32 +156,15 @@ export default function VideoCard(props: Props) {
                             </Typography>
                         </Box>
                     </Box>
-
-                    {category === "" &&
-                              <Typography variant="body1"
-                              sx={{
-                                  flexGrow: 1,
-                                  fontFamily: 'Noto Sans',
-                                  fontWeight: 400,
-                                  fontSize: 14,
-                                  color: '#151515',
-                                  textDecoration: 'none',
-                                  mt: 2,
-                                  ml: 2,
-                              }}
-                          >
-                    Запрос находится в обработке
-                    </Typography>}
                 </Box>
                 <Box sx={{ pt: 4 }}>
                     <img src={publicLink} alt="Kokos Hackathon" width="166px"></img>
                 </Box>
             </CardContent>
-            {isReady &&
-                (<CardActions style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-                    <Button className="gradientButton" href={source} style={{ borderRadius: '20px', color: 'white' }} sx={{ mt: 'auto', mb: 2, ml: 1, mr: 1 }}>Подробнее</Button>
-                </CardActions>)
-            }
+            <CardActions style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                <Button disabled={theme === ""} className="gradientButton" href={source} style={{ borderRadius: '20px', color: 'white' }} sx={{ mt: 'auto', mb: 2, ml: 1, mr: 1 }}>Подробнее</Button>
+            </CardActions>
+            
         </Card>
     );
 
