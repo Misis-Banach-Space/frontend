@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useState } from "react";
 import ApiService from "../services/api";
-import CategoryTable from '../components/CategoryTable'
+import PageTable from '../components/PageTable'
 
 
 const options = ['Бизнес', 'Бытовая техника', 'Еда и напитки', 'Животные', 'Канцелярские товары', 'Красота и здоровье', 'Недвижимость', 'Образование', 'Одежда, обувь и аксессуары', 'Отдых и путешествия', 'Подарки и цветы', 'Работа', 'Развлечения и досуг', 'Сельскохозяйственное оборудование и техника', 'Семья и дети', 'Спорт', 'Строительство, обустройство и ремонт', 'Телеком', 'Транспорт', 'Финансы', 'Электроника']
@@ -12,24 +12,30 @@ function Home() {
     const [value, setValue] = useState<string | null>(options[0]);
     const [inputValue, setInputValue] = useState('');
     const [dataFetched, setDataFetched] = useState(false);
-    const [websiteCategory, setwebsiteCategory] = useState('')
-    const [websiteTheme, setwebsiteTheme] = useState('')
-    const [websiteUrl, setwebsiteUrl] = useState('')
+    const [pageUrls, setPageUrls] = useState<string[]>([]);
+    const [pageThemes, setPageThemes] = useState<string[]>([])
+    const [pageCategories, setPageCategories] = useState<string[]>([])
 
     const combinedData: string[][] = [];
-    if (websiteTheme !== 'unmatched') {
-      combinedData.push([websiteUrl, websiteCategory, websiteTheme])
+
+    for (let i = 0; i < pageUrls.length; i++) {
+      const url = pageUrls[i];
+      const category = pageCategories[i] || '';
+      const theme = pageThemes[i] || '';
+      combinedData.push([url, category, theme]);
     }
 
     async function handleSubmit() {
         if(value){
             try {
                 let response = await ApiService.getWebsiteByCategory(value);
+                const extractedUrls = response.data.map((it: any) => it.url)
+                setPageUrls(extractedUrls)
+                const extractedThemes = response.data.map((it: any) => it.theme)
+                setPageThemes(extractedThemes)
+                const extractedCat = response.data.map((it: any) => it.category)
+                setPageCategories(extractedCat)
                 setDataFetched(true)
-                setwebsiteUrl(response.data.url)
-                setwebsiteCategory(response.data.category)
-                setwebsiteTheme(response.data.theme)
-                console.log(response.data)
             } catch (error) {
                 console.log(error)
             }
@@ -57,8 +63,8 @@ function Home() {
                     <Button onClick={handleSubmit} className="gradientButton" style={{ borderRadius: '20px', color: 'white' }} sx={{ mt: 0.5, ml: 'auto', mr: 'auto', mb: 2 }}>Найти</Button>
             </Box>
             {dataFetched &&
-                            <Box>
-                            <CategoryTable data={combinedData}/>
+                            <Box sx={{margin: '0 auto'}}>
+                            <PageTable data={combinedData}/>
                         </Box>}
         </>
     );
