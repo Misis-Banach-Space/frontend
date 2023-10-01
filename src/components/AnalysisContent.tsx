@@ -36,7 +36,7 @@ function AnalysisContent() {
   const [competitiors, setCompetitors] = useState([]);
   const [visitsMonth, setVisitsMonth] = useState<{ [month: string]: number[]; }>();
   const [visistsCountry, setVisitsCountry] = useState<{ [country: string]: number[]; }>();
-  const [yandex, setYandex] = useState<{ [country: string]: number[]; }>();
+  const [yandex, setYandex] = useState<string[][]>();
 
   
   
@@ -469,7 +469,7 @@ function AnalysisContent() {
               </Typography>
 
             </Box>
-            <DataTable data={yandex} />
+            <DataTable data={yandex || [[]]} />
           </Box>
 
         </>}
