@@ -7,7 +7,8 @@
   </h2>
 </div>
 
-
+# ![Сервис]('src/assets/screenshots/siteAnalysis/jpg')
+<img src='src/assets/screenshots/Competitors/jpg'>
 
 # Сервис по определению тематики сайта
 <table>
@@ -20,10 +21,10 @@
 
 ## Функционал
 
+
 ### Технологии
 
 * <a href='https://ru.vuejs.org'>Vue
 * <a href='https://react.dev'>React
 * <a href='https://mui.com'>Mui-Materials
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+
