@@ -1,8 +1,9 @@
-import { Typography, Box, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useState } from "react";
 import ApiService from "../services/api";
+import CategoryTable from '../components/CategoryTable'
 
 
 const options = ['Бизнес', 'Бытовая техника', 'Еда и напитки', 'Животные', 'Канцелярские товары', 'Красота и здоровье', 'Недвижимость', 'Образование', 'Одежда, обувь и аксессуары', 'Отдых и путешествия', 'Подарки и цветы', 'Работа', 'Развлечения и досуг', 'Сельскохозяйственное оборудование и техника', 'Семья и дети', 'Спорт', 'Строительство, обустройство и ремонт', 'Телеком', 'Транспорт', 'Финансы', 'Электроника']
@@ -10,69 +11,29 @@ const options = ['Бизнес', 'Бытовая техника', 'Еда и н�
 function Home() {
     const [value, setValue] = useState<string | null>(options[0]);
     const [inputValue, setInputValue] = useState('');
+    const [dataFetched, setDataFetched] = useState(false);
+    const [websiteCategory, setwebsiteCategory] = useState('')
+    const [websiteTheme, setwebsiteTheme] = useState('')
+    const [websiteUrl, setwebsiteUrl] = useState('')
 
+    const combinedData: string[][] = [];
+    if (websiteTheme !== 'unmatched') {
+      combinedData.push([websiteUrl, websiteCategory, websiteTheme])
+    }
 
     async function handleSubmit() {
-        // let errorEmpty = false;
-        // let Urls = [];
-        // if (selectedFile) Urls = uploadedFiles;
-        // else Urls = linkArr;
-        // // check if link valid
-        // if (!linkArr) {
-        //     setError3(true);
-        //     errorEmpty = true;
-        //     console.log('klfsfl')
-        //     setdisableButton(true)
-        //     setHelperText3("Введите ссылки на сайты. Каждая ссылка в новой строке");
-        // } else {
-        //     setError3(false);
-        //     errorEmpty = false;
-        //     setHelperText3("");
-        //     setdisableButton(false);
-        // }
-        // if (!error3 && !errorEmpty) {
-        //     let sites = [];
-        //     let pages = [];
-        //     for (let i = 0; i < Urls.length; i++) {
-        //         if (isDomainOnlyUrl(Urls[i])) {
-        //             if (Urls[i].endsWith("/")) {
-        //                 Urls[i] = Urls[i].slice(0, -1);
-        //             }
-        //             Urls[i] = Urls[i].trim();
-        //             try {
-        //                 let response = await ApiService.createSite({
-        //                     url: Urls[i],
-        //                 });
-        //                 sites.push({ data: response.data, timestamp: formatTime(new Date()), url: Urls[i] });
-        //             } catch (error) {
-        //                 let response = await ApiService.checkSiteUrl({
-        //                     url: Urls[i],
-        //                 });
-        //                 sites.push({ data: response.data.id, timestamp: formatTime(new Date()), url: Urls[i] });
-        //             }
-        //         }
-        //         else {
-        //             if (Urls[i].endsWith("/")) {
-        //                 Urls[i] = Urls[i].slice(0, -1);
-        //             }
-        //             Urls[i] = Urls[i].trim();
-        //             try {
-        //                 let response = await ApiService.createSubPage({
-        //                     url: Urls[i],
-        //                 });
-
-        //                 pages.push({ data: response.data, timestamp: formatTime(new Date()), url: Urls[i] });
-        //             } catch (error) {
-        //                 let response = await ApiService.checkPageUrl({
-        //                     url: Urls[i],
-        //                 });
-
-        //                 pages.push({ data: response.data.id, timestamp: formatTime(new Date()), url: Urls[i] });
-
-        //             }
-        //         }
-        //     }
-        // }
+        if(value){
+            try {
+                let response = await ApiService.getWebsiteByCategory(value);
+                setDataFetched(true)
+                setwebsiteUrl(response.data.url)
+                setwebsiteCategory(response.data.category)
+                setwebsiteTheme(response.data.theme)
+                console.log(response.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
     }
     return (
         <>
@@ -95,6 +56,10 @@ function Home() {
                 </Box>
                     <Button onClick={handleSubmit} className="gradientButton" style={{ borderRadius: '20px', color: 'white' }} sx={{ mt: 0.5, ml: 'auto', mr: 'auto', mb: 2 }}>Найти</Button>
             </Box>
+            {dataFetched &&
+                            <Box>
+                            <CategoryTable data={combinedData}/>
+                        </Box>}
         </>
     );
 }

@@ -14,10 +14,6 @@ function Home() {
       setIsBoxVisible(false);
     };
 
-    const handleClickCat = () => {
-        setIsBoxVisible(false);
-      };
-
     return (
         <>
             <Box maxWidth="1200px" sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' }, justifyContent: 'flex-start' , margin: '0 auto'}}>
@@ -55,7 +51,7 @@ function Home() {
                         </Typography>
                     </Box>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } , margin: '0 auto', width: '700px', position: 'absolute', left: 0, right: 0}}>
-                        <Button className="gradientButton" style={{ borderRadius: '20px', color: 'white', fontWeight: '700'}} sx={{ mt: 5 }} onClick={handleClick}>Анализ сайтов</Button>
+                        <Button className="gradientButton" style={{ borderRadius: '20px', color: 'white', fontWeight: '700'}} sx={{ mt: 5 , mr: 5}} onClick={handleClick}>Анализ сайтов</Button>
                         <Button className="gradientButton" style={{ borderRadius: '20px', color: 'white', fontWeight: '700'}} sx={{ mt: 5 }} onClick={() => navigate(`categories`)}>Сайты по категории</Button>
                     </Box>
                 </Box> ) : (<VideoForm />) }

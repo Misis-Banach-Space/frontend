@@ -1,10 +1,7 @@
-import { Link } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import { Button, Typography, Box, Grid } from "@mui/material";
-import { useState, useEffect } from "react";
-import Divider from '@mui/material/Divider';
+import { Button, Typography, Box} from "@mui/material";
 const publicLink = "/src/assets/publication.jpg";
 
 interface Props {
@@ -18,13 +15,8 @@ interface Props {
 }
 
 export default function VideoCard(props: Props) {
-    const [isReady, setIsReady] = useState(false);
-    const { link, title, category, site_id, page_id, theme, time } = props;
+    const { link, category, site_id, theme, time } = props;
 
-
-    useEffect(() => {
-        if (status === "processing") setIsReady(false);
-    }, []);
 
     let source = `/article/${site_id}`;
     return (

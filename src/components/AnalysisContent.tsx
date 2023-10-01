@@ -7,8 +7,8 @@ import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 import LineChart from "./LineChart";
 import MapChart from "./MapChart";
-import dataExample from './data'
-import DataTable from './DataTable';
+// import dataExample from './data'
+// import DataTable from './DataTable';
 import PageTable from './PageTable';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx'
@@ -23,10 +23,26 @@ interface PageDataItem {
 }
 
 function AnalysisContent() {
+  const [websiteCategory, setwebsiteCategory] = useState('')
+  const [websiteTheme, setwebsiteTheme] = useState('')
+  const [websiteUrl, setwebsiteUrl] = useState('')
+  const [websiteStats, setwebsiteStats] = useState<any>(null)
+  const [pageUrls, setPageUrls] = useState<string[]>([]);
+  const [pageThemes, setPageThemes] = useState<string[]>([])
+  const [pageCategories, setPageCategories] = useState<string[]>([])
+  const [dataFetched, setDataFetched] = useState(false);
+  const [isOtherStats, setIsOtherStats] = useState(false);
+
+  const [competitiors, setCompetitors] = useState([]);
+  const [visitsMonth, setVisitsMonth] = useState<{ [month: string]: number[]; }>();
+  const [visistsCountry, setVisitsCountry] = useState<{ [country: string]: number[]; }>();
+
+  
+  
   let { id } = useParams<{ id: string }>();
-  const rawData = (dataExample.competitiors);
+  const rawData: any = (competitiors);
   const generateCompetitorPapers = () => {
-    return rawData.map((competitor, index) => (
+    return rawData.map((competitor : any, index : any) => (
       <Paper sx={{ mb: 2 }} key={index}>
         <a href={`https://${competitor}`} target="_blank" style={{ textDecoration: 'none' }}>
           <Typography
@@ -48,14 +64,11 @@ function AnalysisContent() {
   };
 
   //Fetching Data
-  const [websiteCategory, setwebsiteCategory] = useState('')
-  const [websiteTheme, setwebsiteTheme] = useState('')
-  const [websiteUrl, setwebsiteUrl] = useState('')
-  const [websiteStats, setwebsiteStats] = useState<any>(null)
-  const [pageUrls, setPageUrls] = useState<string[]>([]);
-  const [pageThemes, setPageThemes] = useState<string[]>([])
-  const [pageCategories, setPageCategories] = useState<string[]>([])
-  const [dataFetched, setDataFetched] = useState(false);
+
+
+
+
+
   useEffect(() => {
     const fetchSiteData = async () => {
       try {
@@ -66,6 +79,12 @@ function AnalysisContent() {
           setwebsiteCategory(response.data.category)
           setwebsiteTheme(response.data.theme)
           setwebsiteStats(response.data.stats)
+          if (Object.keys(response.data.stats).length > 2) {
+            setIsOtherStats(true);
+            setCompetitors(response.data.stats.competitiors)
+            setVisitsMonth(response.data.stats.visits_by_month)
+            setVisitsCountry(response.data.stats.visits_by_country)
+          }
         }
       }
       catch (error) {
@@ -101,10 +120,11 @@ function AnalysisContent() {
 
   for (let i = 0; i < pageUrls.length; i++) {
     const url = pageUrls[i];
-    const category = '';
+    const category = pageCategories[i] || '';
     const theme = pageThemes[i] || '';
     combinedData.push([url, category, theme]);
   }
+  console.log(competitiors)
 
   //Downloading
   const handleDownload = (format: 'csv' | 'json' | 'xlsx') => {
@@ -210,7 +230,7 @@ function AnalysisContent() {
                       textDecoration: 'none',
                     }}
                   >
-                    Категория
+                    {websiteTheme !== '' && websiteTheme !== 'unmatched' ? 'Категория' : ''}
                   </Typography>
                   <Typography variant="h2"
                     sx={{
@@ -225,7 +245,7 @@ function AnalysisContent() {
                       textDecoration: 'none',
                     }}
                   >
-                    {/* {websiteCategory} */}
+                    {websiteTheme !== '' && websiteTheme !== 'unmatched' ? websiteCategory : ''}
                   </Typography>
                 </Box>
               </Grid>
@@ -245,7 +265,7 @@ function AnalysisContent() {
                       textDecoration: 'none',
                     }}
                   >
-                    Тематика
+                    {websiteTheme !== '' && websiteTheme !== 'unmatched' ? 'Тематика' : ''}
                   </Typography>
                   <Typography variant="h2"
                     sx={{
@@ -260,7 +280,7 @@ function AnalysisContent() {
                       textDecoration: 'none',
                     }}
                   >
-                    {websiteTheme}
+                    {websiteTheme !== '' && websiteTheme !== 'unmatched' ? websiteTheme : ''}
                   </Typography>
                 </Box>
               </Grid>
@@ -304,7 +324,7 @@ function AnalysisContent() {
               >
                 Узнайте категорию запрашиваемых вами страниц, по данному домену
               </Typography>
-              <Box sx={{ display: 'flex',justifyContent:'center',alignItems:'center', mb: 2, }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 2, }}>
                 <Button variant="contained" color="primary" onClick={() => handleDownload('csv')}>CSV</Button>
                 <Button variant="contained" color="primary" onClick={() => handleDownload('json')}>JSON</Button>
                 <Button variant="contained" color="primary" onClick={() => handleDownload('xlsx')}>XLSX</Button>
@@ -317,15 +337,70 @@ function AnalysisContent() {
         }
 
       </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', }}>
-          <Paper elevation={6} sx={{ mt: 4, display: 'flex', alignItems: 'center' }} style={{ borderRadius: 20, padding: '20px' }}>
+      {isOtherStats &&
+        <>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-evenly', }}>
+              <Paper elevation={6} sx={{ mt: 4, display: 'flex', alignItems: 'center' }} style={{ borderRadius: 20, padding: '20px' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Typography variant="h2"
+                    sx={{
+                      textAlign: 'center',
+                      mr: 2,
+                      mt: 1,
+                      flexGrow: 1,
+                      fontFamily: 'PT Sans Caption',
+                      fontWeight: 700,
+                      fontSize: '28px',
+                      color: '#141416',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    График посещаемости
+                  </Typography>
+                  <Typography variant="body1" style={{ width: '572px' }}
+                    sx={{
+                      flexGrow: 1,
+                      fontFamily: 'Noto Sans',
+                      fontWeight: 300,
+                      fontSize: 16,
+                      color: '#585757',
+                      textDecoration: 'none',
+                      textAlign: 'center',
+                      mt: 2,
+                      mb: 5
+                    }}
+                  >
+                    Посмотрите график посещаемости за последние три месяца
+                  </Typography>
+                  <LineChart data={visitsMonth || {}} />
+                </Box>
+              </Paper>
+              <Paper elevation={6} sx={{ ml: 3 }} style={{ borderRadius: 20, padding: '20px' }}>
+                <Typography variant="h2"
+                  sx={{
+                    textAlign: 'center',
+                    flexGrow: 1,
+                    fontFamily: 'PT Sans Caption',
+                    fontWeight: 700,
+                    fontSize: '28px',
+                    color: '#141416',
+                    textDecoration: 'none',
+                    mb: 2,
+                  }}
+                >
+                  Конкуренты
+                </Typography>
+                {generateCompetitorPapers()}
+              </Paper>
+            </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Typography variant="h2"
                 sx={{
                   textAlign: 'center',
                   mr: 2,
                   mt: 1,
+                  pt: 4,
                   flexGrow: 1,
                   fontFamily: 'PT Sans Caption',
                   fontWeight: 700,
@@ -334,7 +409,7 @@ function AnalysisContent() {
                   textDecoration: 'none',
                 }}
               >
-                График посещаемости
+                Таргетинг по регионам и странам
               </Typography>
               <Typography variant="body1" style={{ width: '572px' }}
                 sx={{
@@ -349,105 +424,53 @@ function AnalysisContent() {
                   mb: 5
                 }}
               >
-                Посмотрите график посещаемости за последние три месяца
+                Определяйте географическое положение основной аудитории веб-сайта за последний месяц
               </Typography>
-              <LineChart data={dataExample.visits_by_month} />
+
             </Box>
-          </Paper>
-          <Paper elevation={6} sx={{ ml: 3 }} style={{ borderRadius: 20, padding: '20px' }}>
-            <Typography variant="h2"
-              sx={{
-                textAlign: 'center',
-                flexGrow: 1,
-                fontFamily: 'PT Sans Caption',
-                fontWeight: 700,
-                fontSize: '28px',
-                color: '#141416',
-                textDecoration: 'none',
-                mb: 2,
-              }}
-            >
-              Конкуренты
-            </Typography>
-            {generateCompetitorPapers()}
-          </Paper>
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Typography variant="h2"
-            sx={{
-              textAlign: 'center',
-              mr: 2,
-              mt: 1,
-              pt: 4,
-              flexGrow: 1,
-              fontFamily: 'PT Sans Caption',
-              fontWeight: 700,
-              fontSize: '28px',
-              color: '#141416',
-              textDecoration: 'none',
-            }}
-          >
-            Таргетинг по регионам и странам
-          </Typography>
-          <Typography variant="body1" style={{ width: '572px' }}
-            sx={{
-              flexGrow: 1,
-              fontFamily: 'Noto Sans',
-              fontWeight: 300,
-              fontSize: 16,
-              color: '#585757',
-              textDecoration: 'none',
-              textAlign: 'center',
-              mt: 2,
-              mb: 5
-            }}
-          >
-            Определяйте географическое положение основной аудитории веб-сайта за последний месяц
-          </Typography>
+            <Box sx={{ width: '1200px' }} mb={5}>
+              <MapChart data={visistsCountry || {}} />
+            </Box>
+          </Box>
+          {/* <Box sx={{ width: '1300px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }} mb={5}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Typography variant="h2"
+                sx={{
+                  textAlign: 'center',
+                  mr: 2,
+                  mt: 1,
+                  pt: 4,
+                  flexGrow: 1,
+                  fontFamily: 'PT Sans Caption',
+                  fontWeight: 700,
+                  fontSize: '28px',
+                  color: '#141416',
+                  textDecoration: 'none',
+                }}
+              >
+                Запросы
+              </Typography>
+              <Typography variant="body1" style={{ width: '572px' }}
+                sx={{
+                  flexGrow: 1,
+                  fontFamily: 'Noto Sans',
+                  fontWeight: 300,
+                  fontSize: 16,
+                  color: '#585757',
+                  textDecoration: 'none',
+                  textAlign: 'center',
+                  mt: 2,
+                  mb: 5
+                }}
+              >
+                Определяйте по каким запросом из Яндекса пользователи переходили на сайтов
+              </Typography>
 
-        </Box>
-        <Box sx={{ width: '1200px' }} mb={5}>
-          <MapChart data={dataExample.visits_by_country} />
-        </Box>
-      </Box>
-      <Box sx={{ width: '1300px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }} mb={5}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Typography variant="h2"
-            sx={{
-              textAlign: 'center',
-              mr: 2,
-              mt: 1,
-              pt: 4,
-              flexGrow: 1,
-              fontFamily: 'PT Sans Caption',
-              fontWeight: 700,
-              fontSize: '28px',
-              color: '#141416',
-              textDecoration: 'none',
-            }}
-          >
-            Запросы
-          </Typography>
-          <Typography variant="body1" style={{ width: '572px' }}
-            sx={{
-              flexGrow: 1,
-              fontFamily: 'Noto Sans',
-              fontWeight: 300,
-              fontSize: 16,
-              color: '#585757',
-              textDecoration: 'none',
-              textAlign: 'center',
-              mt: 2,
-              mb: 5
-            }}
-          >
-            Определяйте по каким запросом из Яндекса пользователи переходили на сайтов
-          </Typography>
+            </Box>
+            <DataTable data={dataExample.yandex_request} />
+          </Box> */}
 
-        </Box>
-        <DataTable data={dataExample.yandex_request} />
-      </Box>
-
+        </>}
     </>
   );
 }

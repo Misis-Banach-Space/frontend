@@ -1,7 +1,6 @@
 import { Container, Box, Button } from "@mui/material";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import VideoCard from "../components/VideoCard";
-import { Pagination } from "@mui/material";
 import LocalStorage from '../LocalStorage';
 import ApiService from "../services/api";
 // import { autorun } from 'mobx';
@@ -11,24 +10,24 @@ import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx'
 
 
-const article = {
-    title: 'Запрос',
-    video_link: 'https://misis.ru/',
-    date: '30.09.2023',
-    html_data: '',
-    id: 3,
-}
+// const article = {
+//     title: 'Запрос',
+//     video_link: 'https://misis.ru/',
+//     date: '30.09.2023',
+//     html_data: '',
+//     id: 3,
+// }
 
-interface MyObject {
-    title: string;
-    video_link: string;
-    date: string;
-    html_data: string;
-    id: number,
-}
+// interface MyObject {
+//     title: string;
+//     video_link: string;
+//     date: string;
+//     html_data: string;
+//     id: number,
+// }
 
-const day = [article]
-const videosPerPage = 3;
+// const day = [article]
+// const videosPerPage = 3;
 
 function getSiteFromPage(page: string) {
     let parsedUrl = new URL(page);
@@ -36,20 +35,12 @@ function getSiteFromPage(page: string) {
 }
 
 function VideoContent() {
-    const [page, setPage] = useState(1);
     const [updateRequest, setUpdateRequest] = useState(false);
     const [siteRecords, setSiteRecords] = useState<any[]>([]); 
     const [pageRecords, setPageRecords] = useState<any[]>([]);
-    const [pageRecordsCount, setPageRecordsCount] = useState(0);
-    const [siteRecordsCount, setSiteRecordsCount] = useState(0); 
     const [siteRequest, setSiteRequest] = useState<{ data: any; timestamp: string; url: string }[]>(LocalStorage.array1);
     const [pageRequest, setPageRequest] = useState<{ data: any; timestamp: string; url: string }[]>(LocalStorage.array2);
-    const isFirstRender = useRef(true);
 
-
-
-
-    
     useEffect(() => {
         // Retrieve data from session storage
         const storedArray1 = sessionArray1.get();
@@ -83,7 +74,7 @@ function VideoContent() {
         
         let sites: any = [];
         let pages: any = [];
-        let allSitesFromPages: any = [];
+        // let allSitesFromPages: any = [];
 
         let set = new Set<string>();
 
@@ -91,7 +82,7 @@ function VideoContent() {
             let site = getSiteFromPage(pages[i].url);
             set.add(site);
         }
-        allSitesFromPages = Array.from(set);
+        // allSitesFromPages = Array.from(set);
 
         // if (typeof (EventSource) !== "undefined") {
         //     var source = new EventSource("http://larek.itatmisis.ru:12347/api/v1/websites/sse_update");

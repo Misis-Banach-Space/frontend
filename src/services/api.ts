@@ -1,22 +1,4 @@
-import axios, { AxiosError } from 'axios';
-
-interface SettingFromData {
-    annotation_length: number;
-    article_length: number;
-    screenshot_timing: number;
-    start_timecode: string;
-    end_timecode: string;
-}
-
-interface VideoFormData {
-    settings: SettingFromData;
-    video_link: string;
-}
-
-interface CreateArticleData {
-    body: string;
-    record_id: number;
-}
+import axios from 'axios';
 
 interface CreateSite {
     url: string;
@@ -36,16 +18,6 @@ interface RecordDto {
     preview_picture: string;
     published: boolean;
     screenshot_timing: number;
-}
-
-interface AllRecords {
-    limit: number;
-    offset: number;
-}
-
-interface PublishedStatus {
-    record_id: number;
-    published: boolean;
 }
 
 const BASE_URL = "http://larek.itatmisis.ru:5000";
@@ -68,6 +40,10 @@ const ApiService = {
             return Promise.reject(error);
         }
     },
+    async getWebsiteByCategory(category: string) {
+        const response = await axios.get(`${BASE_URL}/api/v1/websites/category/${category}`);
+        return response;
+    },    
     async getWebsiteById(data: number) {
         const response = await axios.get(`${BASE_URL}/api/v1/websites/${data}`);
         return response;
@@ -93,87 +69,5 @@ const ApiService = {
         let result = await response;
         return result.data;
     },
-
-    //old
-    async createRecord(data: VideoFormData) {
-        // let status = "video added";
-        // let config = {
-        //     headers: {
-        //         Authorization: `Bearer ${getToken()}`
-        //     }
-        // }
-        // console.log(getToken());
-        const response = await axios
-            .post(`${BASE_URL}/api/v1/record/create`, data)
-        let result = await response;
-        console.log(result);
-        console.log(result.data.id);
-        return result;
-    },
-
-    async createArticle(data: CreateArticleData) {
-        // let config = {
-        //     headers: {
-        //         Authorization: `Bearer ${getToken()}`
-        //     }
-        // }
-        const response = await axios
-            .post(`${BASE_URL}/api/v1/article/${data.record_id}`, { body: data.body })
-        let result = await response;
-        return result;
-    },
-
-
-
-    async setPublishedStatus(data: PublishedStatus) {
-        // let status = "video added";
-        // let config = {
-        //     headers: {
-        //         Authorization: `Bearer ${getToken()}`
-        //     }
-        // }
-        // console.log(getToken());
-        const response = await axios
-            .post(`${BASE_URL}/api/v1/record/${data.record_id}/published_status?published=${data.published}`, null)
-        let result = await response;
-        return result;
-    },
-
-    async getArticle(data: number) {
-        // let config = {
-        //     headers: {
-        //         Authorization: `Bearer ${getToken()}`
-        //     }
-        // }
-        const response = await axios.get(`${BASE_URL}/api/v1/article/${data}/main`);
-        return response;
-    },
-
-    async getRecordByArticleId(data: number) {
-        // let config = {
-        //     headers: {
-        //         Authorization: `Bearer ${getToken()}`
-        //     }
-        // }
-        const response = await axios.get(`${BASE_URL}/api/v1/record/by_article/${data}`);
-        return response;
-    },
-
-    async getRecordByRecordId(data: number) {
-        // let config = {
-        //     headers: {
-        //         Authorization: `Bearer ${getToken()}`
-        //     }
-        // }
-        const response = await axios.get(`${BASE_URL}/api/v1/record/${data}`);
-        return response;
-    },
-
-    async getAllRecords(data: AllRecords): Promise<RecordDto[]> {
-        const response = await axios.get(`${BASE_URL}/api/v1/websites/all`);
-        let result = await response;
-        return result.data;
-    },
-
 };
 export default ApiService;

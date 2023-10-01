@@ -19,7 +19,7 @@ function MapChart(props: Props) {
         const dataTable: (string | number)[][] = [];
         dataTable.push(['Страна', 'Посещаемость']); 
         for (const country in rawData) {
-          if (rawData.hasOwnProperty(country)) {
+          if (rawData.hasOwnProperty(country) && country !== 'Title') {
             const value: number = rawData[country][0];
             dataTable.push([country, value]);
           }
@@ -28,8 +28,8 @@ function MapChart(props: Props) {
       const options = {
         region: 'world',
         resolution: 'countries',
-        colorAxis: {colors: ['#477C8B', '#8D146C']},
-        backgroundColor: '#4094AC'
+        colorAxis: {colors: ['#477C8B', '#9347B2']},
+        backgroundColor: '#B7DAE4'
       };
       const chart = new google.visualization.GeoChart(document.getElementById('chart-container'));
       chart.draw(data, options);

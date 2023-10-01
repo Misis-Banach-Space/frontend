@@ -55,6 +55,7 @@ const VideoForm = observer(() => {
                 setDisableUploadButton(false);
               }
         }
+        setdisableButton(isInvalidFormat)
         // setdisableButton(inputText.trim() !== '' && !selectedFile);
         setDisableUploadButton(inputText.trim() !== '' || isInvalidFormat);
         setLinkArr(Array.from(linkSet));
@@ -142,25 +143,10 @@ const VideoForm = observer(() => {
         }
     }
 
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
     const [errorText, setErrorText] = useState('');
     const [textFieldDisabled, setTextFieldDisabled] = useState(false);
-
-    // function parseCSV(csvData: string): string[] {
-    //     const lines = csvData.split('\n');
-    //     const urls: string[] = [];
-    //     for (const line of lines) {
-    //         const columns = line.split(',');
-    //         for (const column of columns) {
-    //             const trimmedColumn = column.trim();
-    //             if (trimmedColumn) {
-    //                 urls.push(trimmedColumn);
-    //             }
-    //         }
-    //     }
-    //     return urls;
-    // }
 
     function parseCSV(csvData: string): { columns: number, urls: string[] } {
         const lines = csvData.split('\n');

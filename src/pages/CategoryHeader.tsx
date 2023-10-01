@@ -1,14 +1,12 @@
 import { Typography, Box } from "@mui/material";
-import main from "../assets/myVideos-img.svg";
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import { useState } from "react";
-
-const options = ['Бизнес', 'Бытовая техника', 'Еда и напитки', 'Животные', 'Канцелярские товары', 'Красота и здоровье', 'Недвижимость', 'Образование', 'Одежда, обувь и аксессуары', 'Отдых и путешествия', 'Подарки и цветы', 'Работа', 'Развлечения и досуг', 'Сельскохозяйственное оборудование и техника', 'Семья и дети', 'Спорт', 'Строительство, обустройство и ремонт', 'Телеком', 'Транспорт', 'Финансы', 'Электроника']
+// import main from "../assets/myVideos-img.svg";
+// import TextField from '@mui/material/TextField';
+// import Autocomplete from '@mui/material/Autocomplete';
+// import { useState } from "react";
 
 function Home() {
-    const [value, setValue] = useState<string | null>(options[0]);
-    const [inputValue, setInputValue] = useState('');
+    // const [value, setValue] = useState<string | null>(options[0]);
+    // const [inputValue, setInputValue] = useState('');
     return (
         <>
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' }, justifyContent: 'space-evenly' }} mt={6} ml={15}>

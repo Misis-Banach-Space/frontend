@@ -17,8 +17,12 @@ const LineChart = (props: Props) => {
   const [dataChart, setDataChart] = useState<ChartData<"line", number[], string>>(emptyData);
 
   useEffect(() => {
-    const labels = Object.keys(data)
-    const visits = Object.values(data).map((val) => val[0]);
+    const labels = Object.keys(data).filter(key => key !== 'Title');
+    const visits = labels.map(key => data[key][0])
+    
+    // const labels = Object.keys(data);
+    // const visits = labels.map(key => data[key][0]);
+    
     console.log(visits)
 
     const dataChart = {
