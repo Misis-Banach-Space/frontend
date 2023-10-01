@@ -32,6 +32,7 @@
 <img src='src/assets/screenshots/1.jpg'>
 <img src='src/assets/screenshots/2.jpg'>
 <img src='src/assets/screenshots/3.jpg'>
+<img src='src/assets/screenshots/6.jpg'>
 
 
 ### Мои Запросы
@@ -81,4 +82,23 @@
 * <a href='https://mui.com'>Mui-Materials
 * <a href='https://www.typescriptlang.org'>TypeScript
 
+## Установка(фронтенд)
 
+1. Клонируйте репозиторий
+   ```sh
+   git clone https://github.com/Misis-Banach-Space/frontend.git
+   ```
+2. Install NPM packages (при необходимости использовать --force)
+   ```sh
+   npm install
+   ```
+3. Для запуска сервера разработки
+   ```js
+   npm run dev
+   ```
+   Для билдинга
+   ```js
+   npm run build
+   ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
