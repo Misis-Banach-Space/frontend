@@ -164,7 +164,7 @@ function AnalysisContent() {
       <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' }, justifyContent: 'space-evenly', position: 'absolute', top: 100, right: 0, left: 0 }} mt={10} ml={5}>
         <Paper elevation={3} style={{ borderRadius: 20, padding: '20px' }} sx={{ display: 'flex', justifyContent: 'space-between', width: '1000px' }}>
           <Box>
-            <img src={imgLink} alt="AI generating summary from video" width="500px" height="400px"></img>
+            <img src={imgLink} alt="AI generating summary from video" width="300px" height="200px"></img>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Box>

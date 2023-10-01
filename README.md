@@ -9,6 +9,9 @@
 
 # ![Сервис]('src/assets/screenshots/siteAnalysis.jpg')
 <img src='src/assets/screenshots/Competitors.jpg'>
+<img src='src/assets/Competitors.jpg'>
+<img src='./src/assets/Competitors.jpg'>
+<img src='../src/assets/Competitors.jpg'>
 
 # Сервис по определению тематики сайта
 <table>
